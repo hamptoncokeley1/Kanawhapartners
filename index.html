@@ -858,19 +858,6 @@ document.querySelectorAll('a, button').forEach(el => {
 });
 
 // Scroll reveal — visible by default, animate if IntersectionObserver works
-if ('IntersectionObserver' in window) {
-  document.body.classList.add('js-reveal');
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  reveals.forEach(r => observer.observe(r));
-}
 ```
 
   </script>
