@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kanawha Partners</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0D0C0A;
+      --off-black: #141310;
+      --carbon: #1E1C18;
+      --gold: #C9993A;
+      --gold-bright: #E8B84B;
+      --gold-dim: #8A6820;
+      --white: #F2EDE4;
+      --muted: #7A7166;
+      --border: rgba(201,153,58,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Crimson Pro', serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s;
+    }
+    .cursor.expand { width: 40px; height: 40px; background: transparent; border: 1px solid var(--gold); }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.35;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 24px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,12,10,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.18em;
+      color: var(--white);
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--gold);
+      padding: 10px 22px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--gold-bright); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 56px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* LARGE BG TEXT */
+    .hero-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(180px, 28vw, 380px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,153,58,0.07);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: 0.04em;
+      z-index: 0;
+    }
+
+    /* HORIZONTAL GOLD LINE */
+    .hero-line {
+      position: absolute;
+      top: 50%;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold-dim) 20%, var(--gold) 50%, var(--gold-dim) 80%, transparent 100%);
+      opacity: 0.25;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-top-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeIn 0.8s 0.2s forwards;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 12vw, 11rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: slideUp 0.9s 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .hero-headline .gold { color: var(--gold); }
+    .hero-headline .outline {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--white);
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeIn 0.8s 0.8s forwards;
+    }
+
+    .hero-sub {
+      font-size: 1.25rem;
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 420px;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .hero-sub strong {
+      color: var(--white);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .hero-scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-scroll span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+      overflow: hidden;
+      background: var(--carbon);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.22em;
+      color: var(--gold-dim);
+      padding: 0 48px;
+      flex-shrink: 0;
+    }
+
+    .marquee-dot {
+      color: var(--gold);
+      margin: 0 0 0 48px;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* STATEMENT SECTION */
+    .statement {
+      padding: 130px 56px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .statement-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-top: 8px;
+    }
+
+    .statement-text {
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      line-height: 1.4;
+      font-weight: 300;
+      color: var(--white);
+    }
+
+    .statement-text em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* CRITERIA */
+    .criteria {
+      padding: 100px 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .criteria-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+    }
+
+    .section-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.04em;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: var(--border);
+    }
+
+    .criteria-item {
+      background: var(--off-black);
+      padding: 48px 44px;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .criteria-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .criteria-item:hover { background: var(--carbon); }
+    .criteria-item:hover::before { transform: scaleY(1); }
+
+    .criteria-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-dim);
+      margin-bottom: 20px;
+    }
+
+    .criteria-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .criteria-body {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* PROMISE */
+    .promise {
+      padding: 130px 56px;
+      background: var(--carbon);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .promise-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 48px;
+    }
+
+    .promise-headline .gold { color: var(--gold); }
+
+    .promise-body {
+      font-size: 1.2rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 64px;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .promise-body strong { color: var(--white); font-style: normal; }
+
+    .promise-stats {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .promise-stat {
+      flex: 1;
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .promise-stat:last-child { border-right: none; }
+
+    .promise-stat-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .promise-stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* PROCESS */
+    .process {
+      padding: 100px 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .process-steps {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .process-step:first-child { border-top: 1px solid var(--border); }
+
+    .process-step:hover { background: var(--carbon); margin: 0 -56px; padding: 40px 56px; }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--gold);
+      opacity: 0.3;
+      line-height: 1;
+      padding-top: 4px;
+    }
+
+    .step-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      padding-top: 6px;
+    }
+
+    .step-body {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--muted);
+      font-weight: 300;
+      padding-top: 8px;
+    }
+
+    /* CONTACT */
+    .contact {
+      padding: 130px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .contact-left h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+
+    .contact-left h2 .gold { color: var(--gold); }
+
+    .contact-left p {
+      font-size: 1.1rem;
+      line-height: 1.75;
+      color: var(--muted);
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 40px;
+    }
+
+    .contact-email-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: gap 0.25s, color 0.2s;
+    }
+
+    .contact-email-link:hover { color: var(--gold-bright); gap: 24px; }
+
+    .contact-right {
+      border: 1px solid var(--border);
+      padding: 56px 48px;
+      background: var(--carbon);
+    }
+
+    .contact-right-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .contact-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .contact-checklist .ck {
+      color: var(--gold);
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      margin-top: 5px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--off-black);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .footer-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: rgba(122,113,102,0.45);
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 56px; }
+      section, .statement, .criteria, .promise, .process, .contact { padding: 70px 24px; }
+      .statement { grid-template-columns: 1fr; gap: 24px; }
+      .criteria-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .criteria-grid { grid-template-columns: 1fr; }
+      .contact { grid-template-columns: 1fr; }
+      .promise-stats { flex-direction: column; max-width: 280px; }
+      .promise-stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .process-step { grid-template-columns: 48px 1fr; }
+      .step-body { grid-column: 2; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <nav>
+    <div class="nav-logo">KANAWHA <span>PARTNERS</span></div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#criteria">Who We Buy</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Talk to Us</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">KANAWHA</div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <p class="hero-top-label">West Virginia &nbsp;·&nbsp; Appalachia &nbsp;·&nbsp; Permanent Hold</p>
+      <h1 class="hero-headline">
+        We Buy.<br/>
+        <span class="outline">We Keep.</span><br/>
+        <span class="gold">Forever.</span>
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-sub">
+          A home for the business you spent your life building —<br/>
+          <strong>not a stepping stone to someone else's exit.</strong>
+        </p>
+        <div class="hero-scroll">
+          <div class="scroll-line"></div>
+          <span>Scroll</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">PERMANENT HOLD</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">NO FLIP</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">WEST VIRGINIA</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">SBA FINANCING</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">APPALACHIAN ROOTS</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">YOUR PEOPLE STAY</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">FAIR PRICE</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">CLEAN CLOSE</span><span class="marquee-dot">◆</span>
+      <!-- dupe for seamless loop -->
+      <span class="marquee-item">PERMANENT HOLD</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">NO FLIP</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">WEST VIRGINIA</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">SBA FINANCING</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">APPALACHIAN ROOTS</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">YOUR PEOPLE STAY</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">FAIR PRICE</span><span class="marquee-dot">◆</span>
+      <span class="marquee-item">CLEAN CLOSE</span><span class="marquee-dot">◆</span>
+    </div>
+  </div>
+
+  <!-- STATEMENT -->
+  <div class="statement reveal">
+    <div class="statement-label">Our Belief</div>
+    <p class="statement-text">
+      The businesses that hold Appalachian communities together deserve buyers who
+      <em>actually intend to keep them</em> — not dress them up and sell them to a stranger in five years.
+      We're from here. We buy here. We stay here.
+    </p>
+  </div>
+
+  <!-- CRITERIA -->
+  <section class="criteria reveal" id="criteria">
+    <div class="criteria-header">
+      <div>
+        <p class="section-eyebrow">Who We Buy From</p>
+        <h2 class="section-heading">The Right Fit</h2>
+      </div>
+    </div>
+    <div class="criteria-grid">
+      <div class="criteria-item">
+        <div class="criteria-num">01 &mdash;</div>
+        <div class="criteria-title">Profitable Small Business</div>
+        <div class="criteria-body">$500K to $5M in annual earnings. Manufacturing, services, distribution, trades. Doesn't matter what you make — matters that you make money doing it.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">02 &mdash;</div>
+        <div class="criteria-title">Owner Ready to Move On</div>
+        <div class="criteria-body">Retirement. A life change. No family successor. You've earned the next chapter. We make sure the business earns its next chapter too.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">03 &mdash;</div>
+        <div class="criteria-title">Rooted in the Region</div>
+        <div class="criteria-body">West Virginia, Kentucky, Virginia, Tennessee. The places the big firms fly over. We drive to them — because we grew up in them.</div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">04 &mdash;</div>
+        <div class="criteria-title">People Worth Keeping</div>
+        <div class="criteria-body">Long-tenured employees. Loyal customers. A reputation built over decades. That's what we're buying — not just a spreadsheet.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMISE -->
+  <section class="promise reveal">
+    <p class="section-eyebrow">The Difference</p>
+    <h2 class="promise-headline">We don't<br/><span class="gold">flip.</span><br/>We keep.</h2>
+    <p class="promise-body">
+      Most buyers have a five-year plan to sell your business to someone else.
+      <strong>We don't have an exit strategy.</strong> When we buy, we're done buying.
+      Your business stays in our family permanently.
+    </p>
+    <div class="promise-stats">
+      <div class="promise-stat">
+        <div class="promise-stat-val">∞</div>
+        <div class="promise-stat-label">Holding Period</div>
+      </div>
+      <div class="promise-stat">
+        <div class="promise-stat-val">0</div>
+        <div class="promise-stat-label">Planned Resales</div>
+      </div>
+      <div class="promise-stat">
+        <div class="promise-stat-val">WV</div>
+        <div class="promise-stat-label">Home Base</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process reveal" id="process">
+    <p class="section-eyebrow">How It Works</p>
+    <h2 class="section-heading">Four Steps.<br/>No Surprises.</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-title">A Real Conversation</div>
+        <div class="step-body">A phone call. No paperwork. No pressure. We listen more than we talk. You've built something worth understanding before anyone starts throwing numbers around.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-title">We Learn Your Business</div>
+        <div class="step-body">We spend time understanding what you built, who you built it with, and what a good outcome actually looks like for you — before we ever make an offer.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-title">A Straight Offer</div>
+        <div class="step-body">Fair price based on what your business actually earns. No games. No lowball. No bait and switch. If we can't make the numbers work for you, we'll tell you straight.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-title">A Clean Close</div>
+        <div class="step-body">SBA financing. Local attorneys. Straightforward terms. We've done this before and we respect your time. A close that doesn't take forever and doesn't surprise you.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact reveal" id="contact">
+    <div class="contact-left">
+      <h2>Ready<br/>to <span class="gold">Talk?</span></h2>
+      <p>If you're thinking about selling — even years away from being ready — reach out. No obligation. No pitch deck. Just a conversation between people who respect what you built.</p>
+      <a href="/cdn-cgi/l/email-protection#335b565f5f5c7358525d52445b52435241475d5641401d505c5e" class="contact-email-link">
+        <span class="__cf_email__" data-cfemail="79111c15151639121817180e111809180b0d171c0b0a571a1614">[email&#160;protected]</span> &nbsp;→
+      </a>
+    </div>
+    <div class="contact-right">
+      <p class="contact-right-label">What to expect</p>
+      <ul class="contact-checklist">
+        <li><span class="ck">◆</span><span>A response within one business day — from a person, not a form letter</span></li>
+        <li><span class="ck">◆</span><span>A 30-minute call to understand your situation, no strings attached</span></li>
+        <li><span class="ck">◆</span><span>Complete confidentiality — we don't share your information with anyone</span></li>
+        <li><span class="ck">◆</span><span>An honest answer if we're not the right fit, and a referral if we know someone who is</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">KANAWHA PARTNERS</div>
+    <div class="footer-meta">© 2025 Kanawha Partners LLC &nbsp;·&nbsp; Charleston, West Virginia</div>
+    <div class="footer-meta">All rights reserved</div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.fo
