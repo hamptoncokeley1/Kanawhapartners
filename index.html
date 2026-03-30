@@ -128,6 +128,15 @@
       overflow: hidden;
     }
 
+    .hero-mountain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .hero-bg-text {
       position: absolute;
       top: 50%;
@@ -171,11 +180,12 @@
 
     .hero-headline {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 12vw, 11rem);
-      line-height: 0.92;
+      font-size: clamp(3.2rem, 6.5vw, 6.5rem);
+      line-height: 1.05;
       letter-spacing: 0.02em;
       color: #F2EDE4;
       margin-bottom: 48px;
+      max-width: 820px;
       opacity: 0;
       animation: slideUp 0.9s 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
     }
@@ -195,10 +205,10 @@
     }
 
     .hero-sub {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       line-height: 1.65;
       color: #7A7166;
-      max-width: 420px;
+      max-width: 480px;
       font-style: italic;
       font-weight: 300;
     }
@@ -207,6 +217,16 @@
       color: #F2EDE4;
       font-style: normal;
       font-weight: 400;
+    }
+
+    .hero-sub-secondary {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #5A5450;
+      max-width: 480px;
+      font-style: italic;
+      font-weight: 300;
+      margin-top: 16px;
     }
 
     .hero-scroll {
@@ -620,20 +640,90 @@
   </nav>
 
   <section class="hero">
+
+    <!-- Appalachian landscape — layered ridges fading to gold horizon, tree silhouettes -->
+    <svg class="hero-mountain" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#0A0907"/>
+          <stop offset="40%"  stop-color="#0D0C0A"/>
+          <stop offset="70%"  stop-color="#1A1408"/>
+          <stop offset="84%"  stop-color="#3A2A0A"/>
+          <stop offset="93%"  stop-color="#8A6820"/>
+          <stop offset="100%" stop-color="#C9993A"/>
+        </linearGradient>
+        <radialGradient id="hGlow" cx="50%" cy="100%" rx="55%" ry="35%">
+          <stop offset="0%"   stop-color="#C9993A" stop-opacity="0.3"/>
+          <stop offset="50%"  stop-color="#8A6820" stop-opacity="0.1"/>
+          <stop offset="100%" stop-color="#0D0C0A" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0E0D0A"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+        <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#111009"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+        <linearGradient id="r3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#16140F"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+        <linearGradient id="r4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1C1A14"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+        <linearGradient id="r5" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#221E16"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+        <linearGradient id="rtrees" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0A0908"/><stop offset="100%" stop-color="#0D0C0A"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="1920" height="1080" fill="url(#hSky)"/>
+      <rect width="1920" height="1080" fill="url(#hGlow)"/>
+
+      <!-- Horizon glow line -->
+      <rect x="0" y="558" width="1920" height="1" fill="#C9993A" opacity="0.2"/>
+
+      <!-- Ridge 1 — farthest, lightest, at horizon -->
+      <path d="M0,560 C120,548 240,538 380,532 C480,528 560,540 680,532 C780,526 880,514 980,510 C1060,506 1160,516 1280,510 C1380,504 1480,496 1600,500 C1700,504 1820,508 1920,506 L1920,1080 L0,1080 Z" fill="url(#r1)" opacity="0.65"/>
+
+      <!-- Ridge 2 -->
+      <path d="M0,600 C100,590 220,578 360,566 C460,558 560,572 680,560 C780,550 880,538 1000,534 C1090,530 1200,544 1320,536 C1420,530 1540,520 1660,526 C1760,532 1860,528 1920,526 L1920,1080 L0,1080 Z" fill="url(#r2)" opacity="0.78"/>
+
+      <!-- Ridge 3 — big rounded Appalachian dome, center prominence -->
+      <path d="M0,652 C80,642 160,628 260,612 C340,600 420,614 510,600 C580,590 640,574 730,568 C800,564 870,578 960,570 C1040,564 1120,548 1220,544 C1300,540 1400,554 1510,546 C1610,540 1720,534 1840,540 C1900,544 1920,542 1920,542 L1920,1080 L0,1080 Z" fill="url(#r3)" opacity="0.86"/>
+
+      <!-- Ridge 4 — nearer, more defined -->
+      <path d="M0,714 C70,704 150,690 250,676 C330,664 420,678 520,664 C600,652 670,638 760,632 C840,628 920,642 1020,634 C1100,628 1190,612 1300,608 C1390,604 1500,618 1620,610 C1720,604 1840,610 1920,608 L1920,1080 L0,1080 Z" fill="url(#r4)" opacity="0.92"/>
+
+      <!-- Ridge 5 — foreground ridge -->
+      <path d="M0,782 C60,770 140,756 240,742 C320,730 410,744 510,730 C590,718 660,704 750,700 C830,696 910,712 1010,704 C1090,698 1180,682 1290,678 C1380,674 1490,688 1610,680 C1710,674 1830,680 1920,678 L1920,1080 L0,1080 Z" fill="url(#r5)" opacity="0.97"/>
+
+      <!-- Tree silhouettes — clean programmatic spruce/fir -->
+      <path d="M0,1080 L0,765 L16,743 L40,678 L64,743 L41,743 L65,692 L90,743 L67,735 L95,662 L123,735 L105,741 L122,697 L140,741 L133,741 L151,697 L168,741 L155,738 L180,676 L205,738 L183,737 L209,667 L235,737 L213,741 L241,674 L269,741 L233,741 L265,665 L297,741 L265,750 L288,704 L312,750 L283,747 L317,677 L352,747 L313,749 L346,673 L378,749 L341,752 L374,681 L408,752 L376,756 L407,693 L437,756 L408,759 L429,708 L450,759 L433,759 L452,708 L472,759 L450,755 L478,691 L505,755 L483,758 L504,708 L525,758 L507,752 L537,687 L568,752 L535,749 L561,681 L588,749 L552,744 L588,667 L624,744 L583,743 L617,677 L650,743 L629,743 L648,692 L667,743 L653,740 L674,688 L695,740 L676,732 L707,659 L737,732 L708,734 L737,678 L766,734 L743,735 L764,682 L786,735 L769,735 L793,683 L817,735 L803,735 L826,679 L849,735 L837,738 L860,677 L883,738 L860,744 L882,697 L904,744 L892,747 L914,690 L936,747 L906,748 L940,671 L975,748 L947,757 L974,684 L1001,757 L975,766 L1005,700 L1035,766 L1005,773 L1030,708 L1055,773 L1027,781 L1057,723 L1088,781 L1066,791 L1090,739 L1113,791 L1076,791 L1114,717 L1151,791 L1109,798 L1139,733 L1170,798 L1132,801 L1163,732 L1195,801 L1172,807 L1195,746 L1217,807 L1198,814 L1220,770 L1243,814 L1223,808 L1253,737 L1283,808 L1238,808 L1276,735 L1314,808 L1276,810 L1299,751 L1321,810 L1303,806 L1330,737 L1357,806 L1332,804 L1358,743 L1383,804 L1367,801 L1390,744 L1413,801 L1391,794 L1419,726 L1446,794 L1408,788 L1444,711 L1481,788 L1448,788 L1472,727 L1495,788 L1471,785 L1496,731 L1522,785 L1502,783 L1521,732 L1540,783 L1524,779 L1551,728 L1577,779 L1564,778 L1583,732 L1601,778 L1593,775 L1613,724 L1633,775 L1618,771 L1646,709 L1674,771 L1649,769 L1678,699 L1706,769 L1675,773 L1701,715 L1726,773 L1696,772 L1728,704 L1761,772 L1742,779 L1762,733 L1782,779 L1759,775 L1788,703 L1818,775 L1787,780 L1812,722 L1838,780 L1811,784 L1838,732 L1865,784 L1832,780 L1865,708 L1898,780 L1920,799 L1920,1080 Z" fill="url(#rtrees)" opacity="0.98"/>
+
+      <!-- Faint canopy glow — dawn light at treeline -->
+      <ellipse cx="960" cy="822" rx="1200" ry="18" fill="#C9993A" opacity="0.04"/>
+    </svg>
+
     <div class="hero-bg-text">KANAWHA</div>
     <div class="hero-line"></div>
+
     <div class="hero-content">
       <p class="hero-top-label">West Virginia &nbsp;·&nbsp; Appalachia &nbsp;·&nbsp; Permanent Hold</p>
       <h1 class="hero-headline">
-        We Buy.<br/>
-        <span class="outline">We Build.</span><br/>
-        <span class="gold">Forever.</span>
+        The permanent home for Appalachian manufacturers.
       </h1>
       <div class="hero-bottom">
-        <p class="hero-sub">
-          A home for the business you spent your life building —<br/>
-          <strong>not a stepping stone to someone else's exit.</strong>
-        </p>
+        <div>
+          <p class="hero-sub">
+            A home for the business you spent your life building —<br/>
+            <strong>not a stepping stone to someone else's exit.</strong>
+          </p>
+          <p class="hero-sub-secondary">
+            Building a successful manufacturing business takes years of focus and commitment.<br/>
+            We exist to preserve your legacy while helping your company continue to grow.
+          </p>
+        </div>
         <div class="hero-scroll">
           <div class="scroll-line"></div>
           <span>Scroll</span>
@@ -647,7 +737,6 @@
       <span class="marquee-item">PERMANENT HOLD</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">NO FLIP</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">WEST VIRGINIA</span><span class="marquee-dot">◆</span>
-      <span class="marquee-item">SBA FINANCING</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">APPALACHIAN ROOTS</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">YOUR PEOPLE STAY</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">FAIR PRICE</span><span class="marquee-dot">◆</span>
@@ -655,7 +744,6 @@
       <span class="marquee-item">PERMANENT HOLD</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">NO FLIP</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">WEST VIRGINIA</span><span class="marquee-dot">◆</span>
-      <span class="marquee-item">SBA FINANCING</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">APPALACHIAN ROOTS</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">YOUR PEOPLE STAY</span><span class="marquee-dot">◆</span>
       <span class="marquee-item">FAIR PRICE</span><span class="marquee-dot">◆</span>
@@ -682,7 +770,7 @@
       <div class="criteria-item">
         <div class="criteria-num">01 &mdash;</div>
         <div class="criteria-title">Profitable Small Business</div>
-        <div class="criteria-body">$500K to $5M in annual earnings. Manufacturing, services, distribution, trades. Doesn't matter what you make — matters that you make money doing it.</div>
+        <div class="criteria-body">$1M to $5M in annual earnings. Manufacturing, services, distribution, trades. Doesn't matter what you make — matters that you make money doing it.</div>
       </div>
       <div class="criteria-item">
         <div class="criteria-num">02 &mdash;</div>
@@ -692,12 +780,12 @@
       <div class="criteria-item">
         <div class="criteria-num">03 &mdash;</div>
         <div class="criteria-title">Rooted in the Region</div>
-        <div class="criteria-body">West Virginia, Kentucky, Virginia, Tennessee. The places the big firms fly over. We drive to them — because we grew up in them.</div>
+        <div class="criteria-body">West Virginia, Kentucky, Ohio, Virginia, Tennessee. The places the big firms fly over. We drive to them — because we grew up in them.</div>
       </div>
       <div class="criteria-item">
         <div class="criteria-num">04 &mdash;</div>
-        <div class="criteria-title">People Worth Keeping</div>
-        <div class="criteria-body">Long-tenured employees. Loyal customers. A reputation built over decades. That's what we're buying — not just a spreadsheet.</div>
+        <div class="criteria-title">People and Customers Worth Keeping</div>
+        <div class="criteria-body">Long-tenured employees. Loyal customers. A reputation built over decades. That's what we're supporting.</div>
       </div>
     </div>
   </section>
@@ -708,8 +796,8 @@
     <div class="why-body">
       <p>Over the next decade, thousands of small business owners across Appalachia will retire. Most built something real — a customer base, a skilled workforce, a reputation earned over decades. And most have no one to hand it to.</p>
       <p>When those businesses go to the wrong buyer, <strong>the jobs follow the capital out of the region.</strong> When they close, the community feels it for a generation.</p>
-      <p>We grew up watching that happen. We're building Kanawha Partners because we think there's a better outcome — one where those businesses don't just survive the transition, but come out the other side stronger. With better systems. More stability. A future their employees can count on.</p>
-      <p>That's not charity. It's just what good ownership looks like.</p>
+      <p>We grew up watching that happen. We're building Kanawha Partners because we believe there's a better way — one where those businesses don't just survive the transition, but come out the other side stronger with better systems, more stability, and a future their employees can count on.</p>
+      <p>It's just what good ownership looks like.</p>
     </div>
   </section>
 
@@ -720,7 +808,7 @@
       <div class="process-step">
         <div class="step-num">01</div>
         <div class="step-title">A Real Conversation</div>
-        <div class="step-body">A phone call. No paperwork. No pressure. We listen more than we talk. You've built something worth understanding before anyone starts throwing numbers around.</div>
+        <div class="step-body">An introductory call. No paperwork or pressure. You've built something worth understanding before anyone starts throwing numbers around.</div>
       </div>
       <div class="process-step">
         <div class="step-num">02</div>
@@ -730,12 +818,12 @@
       <div class="process-step">
         <div class="step-num">03</div>
         <div class="step-title">A Straight Offer</div>
-        <div class="step-body">Fair price based on what your business actually earns. No games. No lowball. No bait and switch. If we can't make the numbers work for you, we'll tell you straight.</div>
+        <div class="step-body">Fair price based on what your business actually earns. No bait and switch. If we can't make the numbers work for you, we'll tell you straight.</div>
       </div>
       <div class="process-step">
         <div class="step-num">04</div>
         <div class="step-title">A Clean Close</div>
-        <div class="step-body">SBA financing. Local attorneys. Straightforward terms. We've done this before and we respect your time. A close that doesn't take forever and doesn't surprise you.</div>
+        <div class="step-body">Local attorneys. Straightforward terms. We've done this before and we respect your time. A close that doesn't take forever and doesn't surprise you.</div>
       </div>
     </div>
   </section>
